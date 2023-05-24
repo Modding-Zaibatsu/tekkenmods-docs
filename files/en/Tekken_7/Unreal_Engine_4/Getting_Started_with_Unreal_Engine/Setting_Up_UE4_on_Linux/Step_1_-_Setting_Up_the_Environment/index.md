@@ -1,4 +1,4 @@
-**NOTE**: This guide series assumes that you are familiar with Linux.
+**INFO**: This guide series assumes that you are familiar with Linux.
 
 Since we are dealing with an old engine build, running UE4's build scripts on newer distros are likely to fail due to missing required packages and variations between different Linux distributions.
 

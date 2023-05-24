@@ -16,7 +16,7 @@ Let's break down the file name.
 
 Not every asset may follow the same naming scheme and it varies between asset types, whether it's for a character or a stage, a blueprint, etc.
 
-**NOTE**: Some stage files start with `T7_`.
+**INFO**: Some stage files start with `T7_`.
 
 Let's break down a few more asset file names:
 
