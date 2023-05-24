@@ -8,19 +8,19 @@ Download the [Visual Studio Community 2015 with Update 3 (7.19 GB)](http://downl
 
 Once downloaded, mount the ISO file by right clicking on it and pressing "Mount".
 
-![Mount the Visual Studio ISO file](./00-mounting_iso.png)
+![Mount the Visual Studio ISO file](00-mounting_iso.png)
 
 The ISO will be mounted as a DVD Drive on your computer, navigate to the virtual drive and open `vs_community.exe`.
 
-![Virtual Drive](./01-virtual-drive-explorer.png)
+![Virtual Drive](01-virtual-drive-explorer.png)
 
 The Visual Studio 2015 installation wizard will appear, make sure that the type of installation is set to `Custom`.
 
-![](./02-vs2015-installation.png)
+![](02-vs2015-installation.png)
 
 Make sure that anything under Visual C++ is selected, we don't need anything else than the Visual C++ features. After that, click on Next and let Visual Studio 2015 install.
 
-![](./03-vs2015-custom-options.png)
+![](03-vs2015-custom-options.png)
 
 ## Downloading and Compiling UE4
 The PC/Console release of Tekken 7 utilizes a modified version of Unreal Engine 4.13.2. While the engine version version is not the latest, the developement team made some modifications to the engine to improve the game's loading times and input delay.
@@ -34,7 +34,7 @@ There are a few theories on why they decided to modify the engine instead of upg
 ### Downloading the ue4-tekkengame repository
 Download the [ue4-tekkengame repository](https://github.com/Modding-Zaibatsu/ue4-tekkengame) straight from Github or clone the respository using git.
 
-![](./04-downloading-from-github.png)
+![](04-downloading-from-github.png)
 
 Make sure that the engine file are located in a directory with a short path name, such as `C:\ue4` or `D:\ue4`, to avoid issues with long path names that both Windows and Unreal Engine 4 have.
 
@@ -45,7 +45,7 @@ Once the files have finished downloading and the UE4 prerequisites were installe
 Open `ue4.sln` with Visual Studio 2015, you may be prompted to log in with a Microsoft account and set your Visual Studio settings before you can proceed with the Engine's compiling process.
 
 Inside Visual Studio 2015, make sure that `Development Editor` is selected.
-![](./05-vs2015-build-setting.png)
+![](05-vs2015-build-setting.png)
 
 At the right side of the Visual Studio 2015 window, you will see a tab called `Solution Explorer`. Right click on `UE4` and click on `Build`.
 
@@ -60,6 +60,6 @@ Congratulations, you have now one set closer to modding Tekken 7.
 If you encounter any errors during the compiling process, ensure the following:
 
  - You have enough memory on your computer
- - The engine files are located in a directory with a short path name
+ - The engine files are located in a directory with a short path name without any spaces
 
 Sometimes clicking on `Build` or `Rebuild` again works.
