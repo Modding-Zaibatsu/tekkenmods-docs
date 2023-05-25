@@ -2,7 +2,7 @@
 
 The following table provides an overview of character IDs for the characters in Tekken 7. Each character ID corresponds to a specific character in the game.
 
-| Character ID | Prefix | Name                 | Playable |
+| Character ID | Abbreviation | Name                 | Playable |
 | ------------ | ------ | -------------------- | -------- |
 | 0            | PAU    | Paul                 | Yes      |
 | 1            | LAW    | Law                  | Yes      |

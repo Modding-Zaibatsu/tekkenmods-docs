@@ -45,6 +45,7 @@ Once the files have finished downloading and the UE4 prerequisites were installe
 Open `ue4.sln` with Visual Studio 2015, you may be prompted to log in with a Microsoft account and set your Visual Studio settings before you can proceed with the Engine's compiling process.
 
 Inside Visual Studio 2015, make sure that `Development Editor` is selected.
+
 ![](05-vs2015-build-setting.png)
 
 At the right side of the Visual Studio 2015 window, you will see a tab called `Solution Explorer`. Right click on `UE4` and click on `Build`.
@@ -56,6 +57,7 @@ Once compiling finished with no errors, the editor executable will be located in
 Congratulations, you have now one set closer to modding Tekken 7.
 
 ### Troubleshooting
+
 #### I get compiling errors
 If you encounter any errors during the compiling process, ensure the following:
 
@@ -63,3 +65,17 @@ If you encounter any errors during the compiling process, ensure the following:
  - The engine files are located in a directory with a short path name without any spaces
 
 Sometimes clicking on `Build` or `Rebuild` again works.
+
+#### The engine closes when I open it
+If you running on an Intel 10 or later Gen processor then there's an issue regarding OpenSSL, to fix it you need to do the following:
+```txt
+Step 1. Open "Control Panel" by searching for it in Windows search bar, by pressing the Windows button or key.
+Step 2. Go to "System & Security"
+Step 3. Go to "System"
+Step 3. Press "Advanced system settings"
+Step 4. Press "Environmental Variables"
+Step 5. Create a new "System Variable" (NOT USER VARIABLE)
+Step 6. Enter the following into the Variable name box: OPENSSL_ia32cap
+Step 7. Enter the following into the Variable value box: ~0x20000000
+Step 8. Now press OK.
+```
