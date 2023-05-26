@@ -1,7 +1,5 @@
 The Unreal Engine 4 BC7 texture format is a widely used texture compression format within the Unreal Engine game development framework. BC7, also known as Block Compression 7, provides efficient compression for high-quality textures. It produces better quality than the more widely available DXT5 format, but it requires a modern GPU and is it's compression process is often slower compared to other formats.
 
-**NOTE**: BC7 should be used for any textures that need high quality compression.
-
 ## Usage Considerations for Tekken 7 Modding
 When working with BC7 textures in the context of Tekken 7 modding, it's important to keep the following considerations in mind:
 
@@ -20,6 +18,6 @@ When working with BC7 textures in UE4, the following considerations apply:
 
 ## See Also
 
-- [`Getting Started with Unreal Engine`](../Unreal_Engine_4/Getting_Started_with_Unreal_Engine/)
-- [`UModel - Unreal Engine Model Viewer`](https://www.gildor.org/en/projects/umodel)
-- [`Normal Maps`](../Normal_Maps/)
+- [Getting Started with Unreal Engine](../Unreal_Engine_4/Getting_Started_with_Unreal_Engine/)
+- [Normal Maps](../Normal_Maps/)
+- [UModel - Unreal Engine Model Viewer](https://www.gildor.org/en/projects/umodel)
