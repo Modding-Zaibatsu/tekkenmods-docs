@@ -7,7 +7,7 @@ Modding in UE4 involves replacing or modifying game assets such as textures, mes
 UE4 employs a virtual file system (VFS) that handles asset loading and management. The VFS is responsible for locating and loading assets based on their file paths and names. When a game starts, the engine scans predefined directories to find and load the required assets.
 
 ## Asset Path Structure
-> _Read Also: [Understanding the Game Files](../../Basic_Information/Understanding_the_Game_Files/)_
+> *Read Also: [Understanding the Game Files](../../Basic_Information/Understanding_the_Game_Files/)*
 
 The game developers organize assets into a hierarchical structure based on their types and categories. Each asset resides in a directory corresponding to its type. For example, character content are stored in the `TekkenGame/Content/Characters` directory, stage assets in the `TekkenGame/Content/Stage` directory, and so on.
 
@@ -15,7 +15,7 @@ The game developers organize assets into a hierarchical structure based on their
 When a game is launched, UE4 loads assets dynamically as they are required during gameplay. The engine searches for assets based on their file paths and names within the uasset file that references them.
 
 ## Modding with .pak Files
-> _Read Also: [Packaging Mod Files](../../Basic_Information/Packaging_Mod_Files/)_
+> *Read Also: [Packaging Mod Files](../../Basic_Information/Packaging_Mod_Files/)*
 
 Modders can package their assets into .pak files and place them in the `~mods` directory. These .pak files contain the modified assets that the engine can load during runtime. Here's an overview of the process:
 
