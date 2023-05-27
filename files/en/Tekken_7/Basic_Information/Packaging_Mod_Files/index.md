@@ -31,7 +31,7 @@ Before proceeding, ensure that you have the following:
 
 3. To package the uasset files, use the following command:
 ```bat
-UnrealPak-With-Compression.bat <path_to_uasset_files> -Create=<output_package_name>
+UnrealPak-With-Compression.bat <path_to_uasset_files>
 ```
 
 Replace `<path_to_uasset_files>` with the path to the directory containing your uasset files, and `<output_package_name>` with the desired name for your packaged file.
