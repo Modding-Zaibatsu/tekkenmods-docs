@@ -163,7 +163,9 @@ The cost of the item
 
 **S**: Unknown (int32)
 
-**T**: Unknown (string)
+**T**: Additional details about the item.
+Example:
+The value `item_text_008` will point to the textual description for Lucky Chloe's tail item that grows when she ranks up
 
 **U**: Unknown
 
