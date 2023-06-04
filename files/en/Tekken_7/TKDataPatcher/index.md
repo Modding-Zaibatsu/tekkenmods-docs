@@ -35,7 +35,7 @@ If two people have the same mod with the same shop item ID, the customized items
 | **Q**. packageId     | -255           |
 | **R**. Item cost     | 0              |
 | **S**. Unknown       | -1             |
-| **T**. Unknown       | \x00           |
+| **T**. Additional Details Text | \x00      |
 | **U**. Unknown       | 0              |
 
 ```csv
