@@ -35,7 +35,7 @@ If two people have the same mod with the same shop item ID, the customized items
 | **Q**. packageId     | -255           |
 | **R**. Item cost     | 0              |
 | **S**. Unknown       | -1             |
-| **T**. Unknown       | \x00           |
+| **T**. Additional Details Text | \x00      |
 | **U**. Unknown       | 0              |
 
 ```csv
@@ -163,7 +163,9 @@ The cost of the item
 
 **S**: Unknown (int32)
 
-**T**: Unknown (string)
+**T**: Additional details about the item.
+Example:
+The value `item_text_008` will point to the textual description for Lucky Chloe's tail item that grows when she ranks up
 
 **U**: Unknown
 
