@@ -24,3 +24,11 @@ Once the script is done generating the project files, run the following:
 ```
 
 This will compile the TekkenGameNative project.
+
+### Troubleshooting
+#### I get compiling errors
+If you get a dialog box that says "To open this project you must first install an IDE." when trying to open a project then install `clang` on the machine you're trying to open UE4 from.
+
+```bash
+~ sudo apt install clang
+```
