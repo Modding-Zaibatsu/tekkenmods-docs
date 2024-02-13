@@ -1,61 +1,42 @@
-## Stage Level-Streaming Suffixes
-
-The following table presents an overview of the suffixes used in Tekken 8 and the types of assets associated with each streamed umap:
-
-| Suffix Name  | Description                                                                                                                              |
-|--------------|------------------------------------------------------------------------------------------------------------------------------------------|
-| debug        | Includes debug information used by the developers.                                                                                       |
-| demo         | Mostly used for story mode related changes, though it's used by every stage                                                              |
-| edit         | The main UE4 editor map, it's essentially the main umap file that is used in the Unreal Editor to create the level.                      |
-| effect       | Contains effect assets such as particle effects.                                                                                         |
-| geom         | Main map/stage files that include the geometry/mesh data.                                                                                |
-| light        | Represents the lighting information for the respective map/stage.                                                                        |
-| lightstatic  | Usually includes baked lighting data and other light-related information.                                                                |
-| mob          | Contains assets related to mobs, such as crowds or pedestrians.                                                                          |
-| reload       | Contains assets that are intended to be reloaded when the battle restarts while the stage remains the same, such as destructible meshes. |
-| sound        | Contains sound data associated with the respective stage.                                                                                |
-| switch       | Used to switch between different stages within the game.                                                                                 |
-| switch_debug | Includes debug information used by the developers related to stage switching.                                                            |
-| WB           | Represents wall brush assets utilized within the game.                                                                                   |
-
-**WARNING**: Different stages use different suffixes for level streaming. Used suffixes are documented in the Stage IDs table. Suffixes that aren't used by the stage won't be loaded.
-
 ## Stage IDs
 
 The following is an overview of the stage IDs available in Tekken 8. These IDs are used to identify specific stages within the game.
 
-| ID                      | Name                                               | Used Level Streaming Suffixes                                                                                              | Playable                   | Extra                                   |
-|-------------------------|----------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|----------------------------|-----------------------------------------|
-| st01_Arena              | Arena                                              | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`lightstatic`<br>`light`<br>`mob`<br>`reload`<br>`sound`              | Yes                        |                                         |
-| st01_Arena_Battle1      | Arena (Underground)                                | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`lightstatic`<br>`light`<br>`mob`<br>`reload`<br>`sound`              | Yes                        |                                         |
-| st01_Arena_Demo1        | Arena [Story Version]                              | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`lightstatic`<br>`light`<br>`mob`<br>`reload`<br>`sound`              | Story Mode Only            |                                         |
-| st01_Arena_Demo2        | Arena (Underground) [Story Version]                | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Story Mode Only            |                                         |
-| st02_NeoCity            | Urban Square (Evening)                             | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`lightstatic`<br>`light`<br>`mob`<br>`reload`<br>`sound`              | Yes                        |                                         |
-| st02_NeoCity_Battle1    | Urban Square                                       | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Yes                        |                                         |
-| st02_NeoCity_Demo1      | Urban Square [Story Version]                       | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Story Mode Only            |                                         |
-| st03_Island             | Yakushima                                          | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Yes                        |                                         |
-| st03_Island_Demo1       | Yakushima [Story Version]                          | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Story Mode Only            |                                         |
-| st04_Colosseum          | Coliseum of Fate                                   | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`lightstatic`<br>`light`<br>`mob`<br>`reload`<br>`sound`              | Yes                        |                                         |
-| st04_Colosseum_Demo1    | Coliseum of Fate [Story Version]                   | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`<br>`switch`<br>`switch_debug` | Story Mode Only            |                                         |
-| st05_Hangar             | Rebel Hangar                                       | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`lightstatic`<br>`light`<br>`mob`<br>`reload`<br>`sound`              | Yes                        |                                         |
-| st05_Hangar_Demo1       | Rebel Hangar [Story Version]                       | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Story Mode Only            |                                         |
-| st07_FinalBattle        | Fallen Destiny                                     | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`lightstatic`<br>`light`<br>`mob`<br>`reload`<br>`sound`              | Yes                        |                                         |
-| st07_FinalBattle_Demo1  | Fallen Destiny [Story Version]                     | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`lightstatic`<br>`light`<br>`mob`<br>`reload`<br>`sound`              | Story Mode Only            |                                         |
-| st07_FinalBattle_Demo2  | Fallen Destiny [Story Version]                     | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Story Mode Only            |                                         |
-| st08_Grassland_Demo1    |                                                    | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Story Mode Only            |                                         |
-| st08_Grassland_Demo2    |                                                    | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Story Mode Only            |                                         |
-| st08_Grassland_Demo3    |                                                    | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Story Mode Only            |                                         |
-| st08_Grassland_Demo4    |                                                    | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Story Mode Only            |                                         |
-| st08_Grassland_Demo5    |                                                    | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`lightstatic`<br>`light`<br>`mob`<br>`reload`<br>`sound`              | Story Mode Only            |                                         |
-| st09_SpiritWorld        | Descent into subconscious                          | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Yes                        |                                         |
-| st09_SpiritWorld_Demo1  | Descent into subconscious [Story Version]          | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`lightstatic`<br>`light`<br>`mob`<br>`reload`<br>`sound`              | Story Mode Only            |                                         |
-| st10_Mountains          | Sanctum                                            | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`lightstatic`<br>`light`<br>`mob`<br>`reload`<br>`sound`              | Yes                        |                                         |
-| st10_Mountains_Demo1    | Sanctum [Story Version]                            | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Story Mode Only            |                                         |
-| st11_VolcanicBomb       | Into the stratosphere                              | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`lightstatic`<br>`light`<br>`mob`<br>`reload`<br>`sound`              | Yes                        |                                         |
-| st11_VolcanicBomb_Demo1 | Into the stratosphere [Story Version]              | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Story Mode Only            |                                         |
-| st12_InTheMist          | Ortiz Farm                                         | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Yes                        |                                         |
-| st13_River              | Celebration on the Seine                           | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Yes                        |                                         |
-| st14_Garden             | Secluded Training Ground                           | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Yes                        |                                         |
-| st15_Penthouse          | Elegant Palace                                     | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`lightstatic`<br>`light`<br>`mob`<br>`reload`<br>`sound`              | Yes                        |                                         |
-| st16_WarZone            | Midnight Seige                                     | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`lightstatic`<br>`light`<br>`mob`<br>`reload`<br>`sound`              | Yes                        |                                         |
-| st90_BeachSide          | Beach Ball                                         | `debug`<br>`demo`<br>`edit`<br>`effect`<br>`geom`<br>`light`<br>`mob`<br>`reload`<br>`sound`                               | Yes                        |                                         |
+| ID  | Internal Name           | Name                                      | Playable                | Extra                                   |
+|-----|-------------------------|-------------------------------------------|-------------------------|-----------------------------------------|
+| 00  | st01_Arena              | Arena                                     | Yes                     |                                         |
+| 01  | st01_Arena_Battle1      | Arena (Underground)                       | Yes                     |                                         |
+| 02  | st01_Arena_Demo1        | Arena [Story Version]                     | Story Mode Only         |                                         |
+| 03  | st01_Arena_Demo2        | Arena (Underground) [Story Version]       | Character Episodes Only |                                         |
+| 04  | st02_NeoCity            | Urban Square (Evening)                    | Yes                     |                                         |
+| 05  | st02_NeoCity_Battle1    | Urban Square                              | Yes                     |                                         |
+| 06  | st02_NeoCity_Demo1      | Urban Square [Story Version]              | Story Mode Only         |                                         |
+| 07  | st03_Island             | Yakushima                                 | Yes                     |                                         |
+| 08  | st03_Island_Demo1       | Yakushima [Story Version]                 | Story Mode Only         |                                         |
+| 09  | st04_Colosseum          | Coliseum of Fate                          | Yes                     |                                         |
+| 10  | st04_Colosseum_Demo1    | Coliseum of Fate [Story Version]          | Story Mode Only         |                                         |
+| 11  | st05_Hangar             | Rebel Hangar                              | Yes                     |                                         |
+| 12  | st05_Hangar_Demo1       | Rebel Hangar [Story Version]              | Story Mode Only         |                                         |
+| 13  | st07_FinalBattle        | Fallen Destiny                            | Yes                     |                                         |
+| 14  | st07_FinalBattle_Demo1  | Fallen Destiny [Story Version]            | Story Mode Only         |                                         |
+| 15  | st07_FinalBattle_Demo2  | Fallen Destiny [Story Version]            | Story Mode Only         |                                         |
+| 16  | st08_Grassland_Demo1    |                                           | Story Mode Only         |                                         |
+| 17  | st08_Grassland_Demo2    |                                           | Story Mode Only         |                                         |
+| 18  | st08_Grassland_Demo3    |                                           | Story Mode Only         |                                         |
+| 19  | st08_Grassland_Demo4    |                                           | Story Mode Only         |                                         |
+| 20  | st08_Grassland_Demo5    |                                           | Story Mode Only         |                                         |
+| 21  | st09_SpiritWorld        | Descent into subconscious                 | Yes                     |                                         |
+| 22  | st09_SpiritWorld_Demo1  | Descent into subconscious [Story Version] | Story Mode Only         | Each floor loadable as a separate stage |
+| 23  | st10_Mountains          | Sanctum                                   | Yes                     |                                         |
+| 24  | st10_Mountains_Demo1    | Sanctum [Story Version]                   | Story Mode Only         | First Floor doesn't exist               |
+| 25  | st11_VolcanicBomb       | Into the stratosphere                     | Yes                     |                                         |
+| 26  | st11_VolcanicBomb_Demo1 | Into the stratosphere [Story Version]     | Story Mode Only         |                                         |
+| 27  | st12_InTheMist          | Ortiz Farm                                | Yes                     |                                         |
+| 28  | st13_River              | Celebration on the Seine                  | Yes                     |                                         |
+| 29  | st14_Garden             | Secluded Training Ground                  | Yes                     |                                         |
+| 30  | st15_Penthouse          | Elegant Palace                            | Yes                     |                                         |
+| 31  | st16_WarZone            | Midnight Seige                            | Yes                     |                                         |
+| 32  | st90_BeachSide          | Beach Ball                                | Yes                     |                                         |
+| 255 | MainMenuStage           |                                           | No                      |                                         |
+| 255 | Customize               |                                           | No                      |                                         |
+| 255 | CharaSelect             |                                           | No                      |                                         |
