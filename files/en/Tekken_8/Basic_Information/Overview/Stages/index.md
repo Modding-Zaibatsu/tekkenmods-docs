@@ -37,6 +37,7 @@ The following is an overview of the stage IDs available in Tekken 8. These IDs a
 | 30  | st15_Penthouse          | Elegant Palace                            | Yes                     |                                         |
 | 31  | st16_WarZone            | Midnight Seige                            | Yes                     |                                         |
 | 32  | st90_BeachSide          | Beach Ball                                | Yes                     |                                         |
+| 33  | st17_Sea                | Seaside Resort                            | Yes                     |                                         |
 | 255 | MainMenuStage           |                                           | No                      |                                         |
 | 255 | Customize               |                                           | No                      |                                         |
 | 255 | CharaSelect             |                                           | No                      |                                         |
