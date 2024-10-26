@@ -3,7 +3,7 @@
 The following table provides an overview of character IDs for the characters in Tekken 8. Each character ID corresponds to a specific character in the game.
 
 | Character ID | Abbreviation | Name                    | Playable |
-| ------------ | ------------ | ----------------------- | -------- |
+|--------------|--------------|-------------------------|----------|
 | 0            | GRF          | Paul                    | Yes      |
 | 1            | PIG          | Law                     | Yes      |
 | 2            | PGN          | King                    | Yes      |
