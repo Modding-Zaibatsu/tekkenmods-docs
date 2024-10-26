@@ -42,9 +42,9 @@ The following table provides an overview of character IDs for the characters in 
 | 35           | BEE          | Heihachi                | Yes      |
 | 116          | DEK          | Practice Dummy          | No       |
 | 117          | XXA          | Angel Jin               | No       |
-| 122          | XXF          | Tekken Monk             | No       |
-| 123          | XXG          | Seiryu                  | No       |
 | 118          | XXB          | True Devil Kazuya       | No       |
 | 119          | XXC          | Jack-7                  | No       |
 | 120          | XXD          | Soldier                 | No       |
 | 121          | XXE          | Devil Jin (Jin's voice) | No       |
+| 122          | XXF          | Tekken Monk             | No       |
+| 123          | XXG          | Seiryu                  | No       |
