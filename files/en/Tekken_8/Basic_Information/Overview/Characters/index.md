@@ -38,6 +38,8 @@ The following table provides an overview of character IDs for the characters in 
 | 31           | BBN          | Raven                   | Yes      |
 | 32           | GOT          | Azazel                  | No       |
 | 33           | DOG          | Eddy                    | Yes      |
+| 34           | CBR          | Lidia                   | Yes      |
+| 35           | BEE          | Heihachi                | Yes      |
 | 116          | DEK          | Practice Dummy          | No       |
 | 117          | XXA          | Angel Jin               | No       |
 | 118          | XXB          | True Devil Kazuya       | No       |
