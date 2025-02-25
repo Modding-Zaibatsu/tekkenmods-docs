@@ -18,8 +18,8 @@ Anything that involves an animation is categorized as a "Move." This includes in
 - List of [Hit Conditions](#hit-conditions)
 - List of Hit/Block sounds (optional)
 - List of [Extra Move Properties](#extra-move-properties) (optional)
-- List of Move Start Properties (optional)
-- List of Move End Properties (optional)
+- List of [Move Start Properties](#move-startend-properties) (optional)
+- List of [Move End Properties](#move-startend-properties) (optional)
 - List of Hitbox Values (optional, non-attack moves don't have hitbox values)
 
 
@@ -113,7 +113,7 @@ A cancel occurs only when the necessary commands and conditions are met. Each mo
 ### Consists of
 - Command
 - List of [Requirements](#requirement)
-- Cancel Extra Data (Additional cancel properties)
+- [Cancel Extra Data](#cancel-extra-data) (Additional cancel properties)
 - Input Detection Window (Start)
 - Input Detection Window (End)
 - Cancel Frame
@@ -257,11 +257,11 @@ struct tk_requirement
 
 
 ### Found in
-- Cancels
-- Hit Conditions
+- [Cancels](#cancel)
+- [Hit Conditions](#hit-conditions)
 - Cutscene Dialogues
-- Extra Move Properties
-- Move Start/End Properties
+- [Extra Move Properties](#extra-move-properties)
+- [Move Start/End Properties](#move-startend-properties)
 
 ### How it works
 To demonstrate, I have this example requirement list from an attack's cancel
@@ -307,7 +307,7 @@ union tk_param
 struct tk_extraprops
 {
   uint32_t frame;
-  uint32_t _0x4;
+  uint32_t _0x4; // unused
   uint32_t property;
   tk_requirement *requirements;
   tk_param params[5];
@@ -353,6 +353,67 @@ Let's break this down one property at a time:
 - Lastly, we frame & property value both as 0, which indicate the end of the property list.
 - If starting frame value is `0x4XXX` then the property is executed every frame starting from Frame `XX`. E.g, `0x400A` would mean to start executing the property on every frame from 10th (0xA) frame and onwards
 
+# Move Start/End Properties
+This resource is similar to [Extra Move Properties](#extra-move-properties) but with one key difference: it does not include a "Starting Frame" attribute. As the name suggests, a move can have a list of properties assigned to it, which are executed either just before the move begins or after it ends. The list continues until it encounters the "End of List" requirement, marking its conclusion.
+
+### Consists of
+- List of Requirements
+- Property ID
+- 5 Parameter values (if any)
+
+### Structure
+<details>
+  <summary>Tekken 8</summary>
+
+```cpp
+// Parameters can be signed, unsigned or float
+union tk_param
+{
+  uint32_t param_unsigned;
+  int32_t param_signed;
+  float param_float;
+};
+
+struct tk_start_end_props
+{
+  tk_requirement *requirements;
+  uint32_t property;
+  tk_param params[5];
+};
+```
+</details>
+
+<details>
+  <summary>Tekken 6/Tag 2/7</summary>
+
+```cpp
+// Parameters can be signed, unsigned or float
+union tk_param
+{
+  uint32_t param_unsigned;
+  int32_t param_signed;
+  float param_float;
+};
+
+struct tk_extraprops
+{
+  tk_requirement *requirements;
+  uint32_t property;
+  tk_param param;
+};
+```
+</details>
+<br/>
+They look like this in memory in hexadecimal view:
+
+```
+<PTR to Requirements> | 000084CC | 00000010 00000020 00000000 00000000 00000000
+<PTR to Requirements> | 000082A5 | 0000000A 00000000 00000000 00000000 00000000
+<PTR to Requirements> | 0000044C | 00000000 00000000 00000000 00000000 00000000
+```
+
+Property `1100` (0x44C) denotes the end of the list
+
 # Hit Conditions
 Resource that is used to dictate which animations to apply on the opponent when an attack move connects, this deals with both the hit & block scenarios, while also navigating standing as well as airborne opponents.
 
@@ -372,10 +433,10 @@ Each move has a list of hit conditions attached to them. End of the list is dict
 
 Below is an example Hit Condition List attached to a move
 ```
-Damage, Reaction List Index, (Requirements)
-20,     12,                  (724: Tornado Available), (1100: End of list)
-20,     6,                   (723: Opponent is Airborne), (1100: End of list)
-20,     181,                 (1100: End of list)
+Damage, Reaction List, (Requirements)
+20,     12,            (724: Tornado Available), (1100: End of list)
+20,     6,             (723: Opponent is Airborne), (1100: End of list)
+20,     181,           (1100: End of list)
 ```
 
 - All Hit conditions have the same damage value, which is 20. The attack described above has 3 hit conditions and we can tell that it's an attack that inflicts Tornado on airborne opponents because of the present of the `Tornado Available` requirement.
