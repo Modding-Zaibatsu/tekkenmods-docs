@@ -351,9 +351,13 @@ Let's break this down one property at a time:
 - I believe `0x801E` property is used for playing mouth fog VFX on snowy/winter stages. Here, the frame value is 80, meaning it'll be applied on 80th frame of Kazuya's idle stance
 - Property `0x8611` and `0x8610` are for applying hand animations on right & left hands respectively. These values have parameters that are the animation indexes. And both of these properties are being applied instantly as soon as we cancel back into the idle stance (Frame: `0x8001`)
 - Lastly, we frame & property value both as 0, which indicate the end of the property list.
+- If starting frame value is `0x4XXX` then the property is executed every frame starting from Frame `XX`. E.g, `0x400A` would mean to start executing the property on every frame from 10th (0xA) frame and onwards
 
 # Hit Conditions
-Resource that is used to dictate which animations to apply on the opponent when an attack move connects, this deals with both the hit & block scenarios.
+Resource that is used to dictate which animations to apply on the opponent when an attack move connects, this deals with both the hit & block scenarios, while also navigating standing as well as airborne opponents.
+
+Note: When we say "standing" in context of reactions and hit conditions, please know that it means opponent that have their feet on the ground, which includes both standing and crouching states.
+
 ### Consists of
 - List of [Requirements](#requirement)
 - Damage
@@ -366,6 +370,28 @@ Resource that is used to dictate which animations to apply on the opponent when 
 ### How it works
 Each move has a list of hit conditions attached to them. End of the list is dictated by encountering a reaction list that has a requirement value `1100` (which is the End-of-List value)
 
+Below is an example Hit Condition List attached to a move
+```
+Damage, Reaction List Index, (Requirements)
+20,     12,                  (724: Tornado Available), (1100: End of list)
+20,     6,                   (723: Opponent is Airborne), (1100: End of list)
+20,     181,                 (1100: End of list)
+```
+
+- All Hit conditions have the same damage value, which is 20. The attack described above has 3 hit conditions and we can tell that it's an attack that inflicts Tornado on airborne opponents because of the present of the `Tornado Available` requirement.
+- The list of requirements varies for each hit condition, determining which reaction will be triggered upon landing the attack. For example, if `Tornado Available` is met first, the reaction-list which have the Tornado effect will be played on the opponent instead of other reactions that might also apply.
+- The order of hit conditions is important. If the `Opponent is Airborne` condition were placed before the `Tornado Available` condition, the Tornado effect would never trigger, as the airborne condition would always be met first, preventing the Tornado reaction from playing out.
+- End of a Hit Condition list is determined by encountering a condition where the requirement list only has the `End of List` value.
+- Attacks that don't have a dedicated airborne reaction tend to only have 1 Hit Condition (standing)
+- Attacks that do have a dedicated airborne reaction tend to have 2 Hit Conditions (airborne, standing)
+- Combo extender (Tornado/Screw) attacks tend to have 3 Hit Conditions (tornado, airborne, standing)
+- Heat Engagers tend to have 6 Hit Conditions
+  - Initial Heat Engagement
+  - Heat Dash
+  - Heat Dash in the same combo as Heat Burst
+  - Heat Dash on Airborne opponents
+  - Airborne opponents
+  - Standing opponents
 
 ### Structure
 <details>
@@ -385,7 +411,7 @@ struct tk_hit_condition
 
 # Cancel Extra Data
 These are 4-byte bit-flags that dictate additional properties for cancels. You should refer to the tab of the same name in the [spreadsheet](https://docs.google.com/spreadsheets/d/1DBkC-HfqD0KWQNeOTKjJWmPxdbEuCcGZxkPxQpsLkOY/edit?usp=sharing). Each moveset has around 50-60 of these values. These flags can do many things at once. Some of the additional properties include
-- Retaining the height for airborne moves like Akuma's flips
+- Retaining the height for airborne moves like Clive's jumping attacks
 - Retaining the frame number when transitioning from Move A to Move B
 - Shaving off starting frames of the next move
 - Playing the next move animation backwards
