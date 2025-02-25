@@ -422,14 +422,14 @@ Note: When we say "standing" in context of reactions and hit conditions, please 
 ### Consists of
 - List of [Requirements](#requirement)
 - Damage
-- Reaction List
+- [Reaction List](#reaction-list)
 
 ### Found in
 - [Moves](#moves)
 - Projectiles
 
 ### How it works
-Each move has a list of hit conditions attached to them. End of the list is dictated by encountering a reaction list that has a requirement value `1100` (which is the End-of-List value)
+Each move has a list of hit conditions attached to them. End of the list is dictated by encountering row that has a requirement value `1100` (which is the End-of-List value)
 
 Below is an example Hit Condition List attached to a move
 ```
@@ -469,6 +469,126 @@ struct tk_hit_condition
 ```
 </details>
 
+# Reaction List
+This resource determines the reaction animations played on the opponent when an attack move connects. It defines the specific animation triggered when the attack is blocked, lands as a normal hit, strikes from different angles (front, side, or behind), or registers as a counter hit. The term "Reaction List" refers to a single instance of this resource, named as such because it contains a list of possible reaction state values.
+
+- Each [Hit Condition](#hit-conditions) item has a corresponding `Reaction List` item
+
+### Consists of
+- List of Pushback for different angles/states
+- List of "Direction of Pushback" for different angles/states
+- List of "Rotation of Pushback" for different angles/states
+- List of reaction move IDs for different angles/states
+
+### List of Pushback for different angles/states
+These refer to `Pushback` resource. More on them later.
+  - Front
+  - Back
+  - Left
+  - Right
+  - Front (Counter Hit)
+  - Downed
+  - Block
+
+### List of "Direction of Pushback" for Different Angles/States  
+
+When an attack connects and a reaction animation is applied, the opponent's movement can be influenced diagonally. These attributes control that behavior. For example, Kazuya’s **df2 on Counter Hit** slightly pushes the opponent to his right, causing them to become slightly off-axis—this effect is achieved through these attributes.
+
+This mini-structure consists of the following values:
+
+- Front
+- Back
+- Left
+- Right
+- Front (Counter Hit) / Additional Height for Airborne Opponents
+- Downed
+
+**Note 1:** The field responsible for *Front* pushback deals with both Hit & Block scenarios<br/>
+**Note 2:** The field responsible for *Front (Counter Hit)* also determines the additional height applied to an airborne opponent when the move connects.
+
+### List of "Rotation of Pushback" for different angles/states
+These attributes determine the opponent's rotation, orientation, and facing direction when an attack connects from a specific angle.  
+
+For example, when Kazuya's **df2 lands on Counter Hit**, the opponent's facing direction shifts slightly to the left of the player upon impact.  
+
+- If an opponent completely turns around after certain attacks, it's due to these rotation values. For instance, a front-hit rotation value may be set to force a **180-degree turn**, causing the opponent to fully rotate upon being hit.
+
+This rotation sub-structure consists of:
+- Front
+- Back
+- Left
+- Right
+- Front (Counter Hit)
+- Downed
+
+### List of reaction move IDs for different angles/states
+  - Standing / Default
+  - Crouching
+  - Standing (Counter Hit)
+  - Crouching (Counter Hit)
+  - Left Side
+  - Left Side (Crouching)
+  - Right Side
+  - Right Side (Crouching)
+  - Back Side
+  - Back Side (Crouching)
+  - Block
+  - Block (Crouching)
+  - Wall-splatted
+  - Downed
+
+### Structure
+<details>
+  <summary>Tekken 6/Tag 2/7/8</summary>
+
+```cpp
+struct tk_reaction
+{
+  // Pushbacks
+  tk_pushback *front_pushback;
+  tk_pushback *backturned_pushback;
+  tk_pushback *left_side_pushback;
+  tk_pushback *right_side_pushback;
+  tk_pushback *front_counterhit_pushback;
+  tk_pushback *downed_pushback;
+  tk_pushback *block_pushback;
+
+  // Directions in which the pushback will be applied
+  uint16_t front_direction; // hit & block
+  uint16_t back_direction;
+  uint16_t left_side_direction;
+  uint16_t right_side_direction;
+  uint16_t front_counterhit_direction;
+  uint16_t downed_direction;
+
+  // Rotations of the body when a reaction is applied
+  uint16_t front_rotation;
+  uint16_t back_rotation;
+  uint16_t left_side_rotation;
+  uint16_t right_side_rotation;
+  uint16_t front_counterhit_rotation; // also 'vertical_pushback'
+  uint16_t downed_rotation;
+
+  // Move IDs
+  uint16_t standing;
+  uint16_t crouch;
+  uint16_t ch;
+  uint16_t crouch_ch;
+  uint16_t left_side;
+  uint16_t left_side_crouch;
+  uint16_t right_side;
+  uint16_t right_side_crouch;
+  uint16_t back;
+  uint16_t back_crouch;
+  uint16_t block;
+  uint16_t crouch_block;
+  uint16_t wallslump;
+  uint16_t downed;
+  uint16_t unk1; // unused
+  uint16_t unk2; // unused
+};
+```
+</details>
 
 # Cancel Extra Data
 These are 4-byte bit-flags that dictate additional properties for cancels. You should refer to the tab of the same name in the [spreadsheet](https://docs.google.com/spreadsheets/d/1DBkC-HfqD0KWQNeOTKjJWmPxdbEuCcGZxkPxQpsLkOY/edit?usp=sharing). Each moveset has around 50-60 of these values. These flags can do many things at once. Some of the additional properties include
