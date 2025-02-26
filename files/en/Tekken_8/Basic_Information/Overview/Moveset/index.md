@@ -280,6 +280,19 @@ Firstmost value is the requirement, while the values proceeded by semi-colons ar
 - If a requirement value is `>= 0x8001` then it's not a Requirement, it's an [Extra Move Property](#extra-move-properties).
 - If instead of a requirement value, the list stores an [Extra Move Property](#extra-move-properties), it will simply be executed/applied on the current move. In the above example, the list stores 2 Properties "Play Sound" and "Camera Shake", those will be applied to the current move as soon as the hit lands on an upright opponent.
 
+Above described structure would look like this in memory:
+```
+Req #   Offset   req       param1     param2     param3     param4     // Description
+--------------------------------------------------------------------------------------
+1       0x0000   0x002C    0x0000     0x0000     0x0000     0x0000     // If successful hit
+2       0x0014   0x0042    0x0000     0x0000     0x0000     0x0000     // If opponent is standing upright
+3       0x0028   0x87F2    0x0009     0x0000     0x0000     0x0000     // Play sound from opponent (grunt)
+4       0x003C   0x87F2    0x0001     0x0019     0x0000     0x0000     // Play sound from opponent (hit VFX)
+5       0x0050   0x8002    0x0000     0x0000     0x0000     0x0000     // Camera Shake - Light variant
+6       0x0064   0x044C    0x0000     0x0000     0x0000     0x0000     // End of the list
+
+```
+
 # Extra Move Properties
 As the name implies, these are optional properties that can be added to a move. While a Move resource includes its Hitbox and Hurtbox values, other elements—such as modifying flags, controlling hand or facial gestures, consuming tornado effects, or triggering audio and visual effects—are managed through these lists.
 
@@ -352,6 +365,17 @@ Let's break this down one property at a time:
 - Property `0x8611` and `0x8610` are for applying hand animations on right & left hands respectively. These values have parameters that are the animation indexes. And both of these properties are being applied instantly as soon as we cancel back into the idle stance (Frame: `0x8001`)
 - Lastly, we frame & property value both as 0, which indicate the end of the property list.
 - If starting frame value is `0x4XXX` then the property is executed every frame starting from Frame `XX`. E.g, `0x400A` would mean to start executing the property on every frame from 10th (0xA) frame and onwards
+
+Above mentioned Extra Properties list would look like this in memory (hexadecimal)
+```
+Prop #  Offset   Frame    _0x4     Property  Req Ptr        Param1   Param2   Param3   Param4   Param5  // Description
+------------------------------------------------------------------------------------------------------------------------
+1       0x0000   0x8001   0x0000   0x81EF    <PTR>          0x0000   0x0000   0x0000   0x0000   0x0000  // Unknown property
+2       0x0020   0x0050   0x0000   0x801E    <PTR>          0x0000   0x0000   0x0000   0x0000   0x0000  // Mouth Fog VFX
+3       0x0040   0x8001   0x0000   0x8611    <PTR>          0x0076   0x0000   0x0000   0x0000   0x0000  // Right Hand animation
+4       0x0060   0x8001   0x0000   0x8610    <PTR>          0x0077   0x0000   0x0000   0x0000   0x0000  // Left Hand animation
+5       0x0080   0x0000   0x0000   0x0000    <PTR>          0x0000   0x0000   0x0000   0x0000   0x0000  // End of list
+```
 
 # Move Start/End Properties
 This resource is similar to [Extra Move Properties](#extra-move-properties) but with one key difference: it does not include a "Starting Frame" attribute. As the name suggests, a move can have a list of properties assigned to it, which are executed either just before the move begins or after it ends. The list continues until it encounters the "End of List" requirement, marking its conclusion.
@@ -473,12 +497,13 @@ struct tk_hit_condition
 This resource determines the reaction animations played on the opponent when an attack move connects. It defines the specific animation triggered when the attack is blocked, lands as a normal hit, strikes from different angles (front, side, or behind), or registers as a counter hit. The term "Reaction List" refers to a single instance of this resource, named as such because it contains a list of possible reaction state values.
 
 - Each [Hit Condition](#hit-conditions) item has a corresponding `Reaction List` item
+- Reaction animations are all part of the same moveset that triggers an action. For example, reaction animations to King's throws are not stored in every character's moveset individually. Instead, they are stored within King's moveset and are selected and played from there.
 
 ### Consists of
-- List of Pushback for different angles/states
-- List of "Direction of Pushback" for different angles/states
-- List of "Rotation of Pushback" for different angles/states
-- List of reaction move IDs for different angles/states
+- [List of Pushback for different angles/states](#list-of-pushback-for-different-anglesstates)
+- [List of "Direction of Pushback" for different angles/states](#list-of-direction-of-pushback-for-different-anglesstates)
+- [List of "Rotation of Pushback" for different angles/states](#list-of-rotation-of-pushback-for-different-anglesstates)
+- [List of reaction move IDs for different angles/states](#list-of-reaction-move-ids-for-different-anglesstates)
 
 ### List of Pushback for different angles/states
 These refer to `Pushback` resource. More on them later.
@@ -500,7 +525,7 @@ This mini-structure consists of the following values:
 - Back
 - Left
 - Right
-- Front (Counter Hit) / Additional Height for Airborne Opponents
+- Front (Counter Hit) / Vertical Pushback for Airborne Opponents
 - Downed
 
 **Note 1:** The field responsible for *Front* pushback deals with both Hit & Block scenarios<br/>
@@ -521,7 +546,11 @@ This rotation sub-structure consists of:
 - Front (Counter Hit)
 - Downed
 
+To calculate the precise rotation value, [refer here](#rotation-value-calculation)
+
 ### List of reaction move IDs for different angles/states
+
+This sub-structure decides what actual move to play for the corresponding situation. They store the move indexes from the source character's moveset. It contains the following values/fields:
   - Standing / Default
   - Crouching
   - Standing (Counter Hit)
@@ -536,6 +565,52 @@ This rotation sub-structure consists of:
   - Block (Crouching)
   - Wall-splatted
   - Downed
+
+Here is how an example reaction list item would look like in memory (hexadecimal)
+```
+Offset   Example Value                  // Description
+-----------------------------------------------------------
+0x0000   <PTR to pushback item>         // Front
+0x0008   <PTR to pushback item>         // Back
+0x0010   <PTR to pushback item>         // Left
+0x0018   <PTR to pushback item>         // Right
+0x0020   <PTR to pushback item>         // Front (Counter Hit)
+0x0028   <PTR to pushback item>         // Downed
+0x0030   <PTR to pushback item>         // Block
+
+0x0038   0x0000                         // Front Direction
+0x003A   0x0000                         // Back Direction
+0x003C   0x0000                         // Left Side Direction
+0x003E   0x0000                         // Right Side Direction
+0x0040   0x0000                         // Front Counterhit Direction
+0x0042   0x0000                         // Downed Direction
+
+0x0044   0x0000                         // Front Rotation
+0x0046   0x0000                         // Back Rotation
+0x0048   0x0000                         // Left Side Rotation
+0x004A   0x0000                         // Right Side Rotation
+0x004C   0x0000                         // Vertical Pushback
+0x004E   0x0000                         // Downed Rotation
+
+0x0050   0x0182 (Move ID 386)           // Standing
+0x0052   0x0182                         // Crouch
+0x0054   0x0182                         // CH
+0x0056   0x0182                         // Crouch CH
+0x0058   0x0182                         // Left Side
+0x005A   0x0182                         // Left Side Crouch
+0x005C   0x0182                         // Right Side
+0x005E   0x0182                         // Right Side Crouch
+
+0x0060   0x0182                         // Back
+0x0062   0x0182                         // Back Crouch
+0x0064   0x0625 (Move ID 1573)          // Block
+0x0066   0x0829 (Move ID 2089)          // Crouch Block
+0x0068   0x0107 (Move ID 263)           // Wallslump
+0x006A   0x0109 (Move ID 265)           // Downed
+0x006C   0x0000                         // Unused
+0x006E   0x0000                         // Unused
+
+```
 
 ### Structure
 <details>
@@ -600,3 +675,16 @@ These are 4-byte bit-flags that dictate additional properties for cancels. You s
 - Play both action & reaction animations on the characters (used in throws)
 
 Some example scenarios are mentioned [here](#cancel---cancel-extra-data)
+
+
+## Rotation Value Calculation
+
+To obtain the 2-byte hexadecimal value that Tekken uses for rotation in degrees, follow this straightforward calculation:
+```
+if      0 degrees = 0x0000
+and   360 degrees = 0xFFFF
+then     1 degree = 0xFFFF / 360 = 0xB6 (or 182 in decimal)
+
+        X degrees = 0xB6 * X
+```
+E.g, `45 degrees` would be `0x1FFF` or `8191`
