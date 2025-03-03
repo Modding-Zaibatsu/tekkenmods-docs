@@ -1,7 +1,10 @@
 # Introduction
 This article presents basic information about common resources that you see in Tekken Movesets. Bandai Namco has been using the same animation engine that they've been using since Tekken 1 but with changes built on top of it in each game. I suggest having this [spreadsheet](https://docs.google.com/spreadsheets/d/1DBkC-HfqD0KWQNeOTKjJWmPxdbEuCcGZxkPxQpsLkOY/edit?usp=sharing) open as you explore this article.
-<br/>
+
+Huge thanks to `Sadamitsu` who explained some of the things I wasn't clear about and `Dennis` for proof-reading the documentation.
+
 More resources will be documented in the future.
+
 ### Please Note
 The structures described here are based on the latest game, *Tekken 8*. While there may be minor differences in structures across different games in the series, please note that these explanations are specifically tailored for *Tekken 8*. You can still get a decent idea for how Movesets work for prior games through this documentation.
 
@@ -176,7 +179,7 @@ Additional properties to apply on the cancel. Description of the resouce is [bel
 These start & end values determine how long you have to make your input. And the values are the frame number of the current move that is currently being performed. If a move has input detection start-value as 10 and end-value as 27, that means you have `27 - 10 = 17` frames to do your input. If the detection end value is `32767`, it means you have the entire duration of the current move to do an input.
 
 ### Cancel - Cancel Frame
-At what frame of the current move, it should cancel to the next move. If this and the Detection Window values are 0, that means the cancel frame is the end of the animation.
+At what frame of the current move, it should cancel to the next move. If this and the Detection Window values are 0, that means the cancel frame is the end of the animation. For attack moves, it's pretty rare for the last frame of the animation to be the point where it cancels back to the idle stance. E.g, EWGF is 50 frames long but it cancels back to idle at frame 36.
 
 ### Cancel - Move ID
 The move it should cancel into.
@@ -517,7 +520,7 @@ These refer to `Pushback` resource. More on them later.
 
 ### List of "Direction of Pushback" for Different Angles/States  
 
-When an attack connects and a reaction animation is applied, the opponent's movement can be influenced diagonally. These attributes control that behavior. For example, Kazuya’s **df2 on Counter Hit** slightly pushes the opponent to his right, causing them to become slightly off-axis—this effect is achieved through these attributes.
+The path or the trajectory in which the opponent will be pushed. When an attack connects and a reaction animation is applied, the opponent's movement can be influenced diagonally. These attributes control that behavior. For example, Kazuya’s **df2 on Counter Hit** slightly pushes the opponent to his right, causing them to become slightly off-axis, this effect is achieved because the trajectory on CH is slightly diagonal.
 
 This mini-structure consists of the following values:
 
@@ -528,11 +531,13 @@ This mini-structure consists of the following values:
 - Front (Counter Hit) / Vertical Pushback for Airborne Opponents
 - Downed
 
+To understand and calculate the precise rotation value, [refer here](#rotation-value-calculation)
+
 **Note 1:** The field responsible for *Front* pushback deals with both Hit & Block scenarios<br/>
 **Note 2:** The field responsible for *Front (Counter Hit)* also determines the additional height applied to an airborne opponent when the move connects.
 
 ### List of "Rotation of Pushback" for different angles/states
-These attributes determine the opponent's rotation, orientation, and facing direction when an attack connects from a specific angle.  
+These attributes determine how an opponent turns when an attack connects.
 
 For example, when Kazuya's **df2 lands on Counter Hit**, the opponent's facing direction shifts slightly to the left of the player upon impact.  
 
@@ -546,7 +551,7 @@ This rotation sub-structure consists of:
 - Front (Counter Hit)
 - Downed
 
-To calculate the precise rotation value, [refer here](#rotation-value-calculation)
+To understand and calculate the precise rotation value, [refer here](#rotation-value-calculation)
 
 ### List of reaction move IDs for different angles/states
 
@@ -688,3 +693,13 @@ then     1 degree = 0xFFFF / 360 = 0xB6 (or 182 in decimal)
         X degrees = 0xB6 * X
 ```
 E.g, `45 degrees` would be `0x1FFF` or `8191`
+
+I'll just quote the exact words that `Sadamitsu` said to me when I asked him about it,
+
+```
+I think it would be easier to understand if you imagine a clock face with hexadecimal numbers. Like in the movie The Martian (2015). In this case:
+0x0000 - is like 12 o'clock.
+0x4000 - is like 3 o'clock.
+0x8000 - is like 6 o'clock.
+0xC000 - is like 9 o'clock.
+```
