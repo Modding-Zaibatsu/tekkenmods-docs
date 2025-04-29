@@ -324,8 +324,8 @@ struct tk_extraprops
 {
   uint32_t frame;
   uint32_t _0x4; // unused
-  uint32_t property;
   tk_requirement *requirements;
+  uint32_t property;
   tk_param params[5];
 };
 ```
@@ -509,7 +509,7 @@ This resource determines the reaction animations played on the opponent when an 
 - [List of reaction move IDs for different angles/states](#list-of-reaction-move-ids-for-different-anglesstates)
 
 ### List of Pushback for different angles/states
-These refer to `Pushback` resource. More on them later.
+These refer to [Pushback](#pushback) resource. More on them later.
   - Front
   - Back
   - Left
@@ -669,6 +669,19 @@ struct tk_reaction
 };
 ```
 </details>
+
+# Pushback
+This is a resource that is used in [Reaction-Lists](#reaction-list) to apply pushback on opponents when an attack connects. Before explaining the structure of a pushback and how it works, let's grasp some basic facts about it:
+- A pushback is broken down into 2 "parts": The initial non-linear part, the latter linear part
+- The non-linear part means that on first frame, 100 units can be applied, second can be 50, third can be 25 and so on...
+- The linear part is consistent
+
+This structure consists of:
+- Linear Displacement: Duration
+- Linear Displacement: Units (how much distance is covered)
+- Number of non-linear Pushback Items
+- Non-linear Pushback Items
+
 
 # Cancel Extra Data
 These are 4-byte bit-flags that dictate additional properties for cancels. You should refer to the tab of the same name in the [spreadsheet](https://docs.google.com/spreadsheets/d/1DBkC-HfqD0KWQNeOTKjJWmPxdbEuCcGZxkPxQpsLkOY/edit?usp=sharing). Each moveset has around 50-60 of these values. These flags can do many things at once. Some of the additional properties include
