@@ -196,7 +196,7 @@ Numerical values represent specific conditions that must be satisfied for the pa
 
 Requirements start from `0` and go up to around `1100` (for Tekken 8), whereas property values begin at `0x8001`. This distinction between Requirements and [Extra Move Properties](#extra-move-properties) is crucial.
 
-For example (all values are according to Tekken 8):
+For example (all values are according to Tekken 8 v2.00.03):
 - Value `0` means "Always True"
 - Value `667` checks if the game is in story mode.
 - Value `44` verifies if the attack that this cancel is attached to, was successful or not.
@@ -422,7 +422,7 @@ union tk_param
   float param_float;
 };
 
-struct tk_extraprops
+struct tk_start_end_props
 {
   tk_requirement *requirements;
   uint32_t property;
@@ -483,7 +483,7 @@ Damage, Reaction List, (Requirements)
 
 ### Structure
 <details>
-  <summary>Tekken 6/Tag 2/7/8</summary>
+  <summary>All Games (Post-Tekken 5)</summary>
 
 ```cpp
 struct tk_hit_condition
@@ -531,7 +531,8 @@ This mini-structure consists of the following values:
 - Front (Counter Hit) / Vertical Pushback for Airborne Opponents
 - Downed
 
-To understand and calculate the precise rotation value, [refer here](#rotation-value-calculation)
+To understand and calculate the precise rotation value, [refer here.](#rotation-value-calculation)<br/>
+[Here's a video example by Sadamitsu](https://drive.google.com/file/d/1X1y_CAgXG-IBF_J-w5kPFDHwqOVgj0KB/view)
 
 **Note 1:** The field responsible for *Front* pushback deals with both Hit & Block scenarios<br/>
 **Note 2:** The field responsible for *Front (Counter Hit)* also determines the additional height applied to an airborne opponent when the move connects.
@@ -551,7 +552,8 @@ This rotation sub-structure consists of:
 - Front (Counter Hit)
 - Downed
 
-To understand and calculate the precise rotation value, [refer here](#rotation-value-calculation)
+To understand and calculate the precise rotation value, [refer here.](#rotation-value-calculation)<br/>
+[Here's a video example by Sadamitsu](https://drive.google.com/file/d/1aP8cU1RuIWlSrwKX3J0Mxetg0U-one2G/view)
 
 ### List of reaction move IDs for different angles/states
 
@@ -619,7 +621,7 @@ Offset   Example Value                  // Description
 
 ### Structure
 <details>
-  <summary>Tekken 6/Tag 2/7/8</summary>
+  <summary>All Games (Post-Tekken 5)</summary>
 
 ```cpp
 struct tk_reaction
@@ -671,17 +673,76 @@ struct tk_reaction
 </details>
 
 # Pushback
-This is a resource that is used in [Reaction-Lists](#reaction-list) to apply pushback on opponents when an attack connects. Before explaining the structure of a pushback and how it works, let's grasp some basic facts about it:
-- A pushback is broken down into 2 "parts": The initial non-linear part, the latter linear part
-- The non-linear part means that on first frame, 100 units can be applied, second can be 50, third can be 25 and so on...
-- The linear part is consistent
+This resource is used in [Reaction-Lists](#reaction-list) to apply pushback to opponents when an attack connects. Before diving into the structure and functionality of pushback, here are some key concepts to understand:
+
+### Pushback Overview
+
+A pushback is divided into two distinct phases:
+
+1. **Non-linear Phase**  
+   - This occurs at the start of the pushback.  
+   - The amount of pushback applied on each frame differs (generally decreasing overtime).
+   - Example:  
+     - Frame 1: 100 units  
+     - Frame 2: 50 units  
+     - Frame 3: 25 units  
+     - ...and so on
+
+2. **Linear Phase**  
+   - This follows the non-linear phase.  
+   - Pushback is applied at a constant rate per frame.
+
 
 This structure consists of:
 - Linear Displacement: Duration
-- Linear Displacement: Units (how much distance is covered)
-- Number of non-linear Pushback Items
-- Non-linear Pushback Items
+- Linear Displacement: Units (how much distance is covered per frame)
+- Number of non-linear Pushback Items (Pushback Extradata)
+- Non-linear Pushback Items (Pushback Extradata)
 
+
+### Example
+
+Let's take an example `Pushback` item from Nina's moveset
+```
+Linear Duration: 44
+Linear Displacement: 60
+Num of non-linear Pushback Items: 8
+non-linear Pushback Items: [132, 61, 30, 15, 10, 0, 0, 0]
+```
+- This has `8` frames of non-linear pushbacks (Pushback Extradata) where first frame will have `132` units of displacement, second will be `61`, third will `15`, fourth will be `10` and the rest will be `0`.
+- After the first `8` frames, over the course of next `44` frames, a linear displacement of `60` will be applied.
+
+### Structure
+<details>
+  <summary>All Games (Post-Tekken 5)</summary>
+
+```cpp
+struct tk_pushback
+{
+  uint16_t duration; // Linear
+  int16_t displacement; // Linear (can be +ve or -ve)
+  uint32_t num_of_pushback_extradatas; // How many non-linear frames
+  tk_pushback_extradata *pushback_extradata; // Array of non-linear displacements
+};
+```
+</details>
+<br/>
+
+# Pushback Extradata
+This resource dictates the distance applied on the body per-frame. Each [Pushback](#pushback) item has a list of Pushback Extradata attached to it. As explained above, it's used for defining non-linear pushback behaviour of a reaction.
+
+### Structure
+<details>
+  <summary>All Games (Post-Tekken 5)</summary>
+
+```cpp
+struct tk_pushback_extradata
+{
+  int16_t displacement; // Can be both +ve and -ve
+};
+```
+</details>
+<br/>
 
 # Cancel Extra Data
 These are 4-byte bit-flags that dictate additional properties for cancels. You should refer to the tab of the same name in the [spreadsheet](https://docs.google.com/spreadsheets/d/1DBkC-HfqD0KWQNeOTKjJWmPxdbEuCcGZxkPxQpsLkOY/edit?usp=sharing). Each moveset has around 50-60 of these values. These flags can do many things at once. Some of the additional properties include
