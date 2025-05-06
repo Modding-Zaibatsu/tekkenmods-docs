@@ -108,6 +108,7 @@ Move
       └─ Hitbox 8
 
 ```
+<br/>
 
 # Cancel
 If you imagine moves as nodes in a graph, then cancels are the edges connecting them. Cancel resources define how and why a move transitions into another move.
@@ -167,7 +168,7 @@ As you may have guessed it, directional inputs are movement inputs, such as `for
 - Some command values are pre-fixed. E.g, `0x8001` means to double-tap forward. You can find more in the [spreadsheet](https://docs.google.com/spreadsheets/d/1DBkC-HfqD0KWQNeOTKjJWmPxdbEuCcGZxkPxQpsLkOY/edit?usp=sharing)
 
 ### Cancel - List of Requirements
-List of conditions that need to be fulfilled for the cancel to happen. This could also be a list of proprties that need to be executed based on some conditions. Refer to the [Requirement](#requirement) resource.
+List of conditions that need to be fulfilled for the cancel to happen. This could also be a list of properties that need to be executed based on some conditions. Refer to the [Requirement](#requirement) resource.
 
 ### Cancel - Cancel Extra Data
 Additional properties to apply on the cancel. Description of the resouce is [below](#cancel-extra-data)
@@ -189,6 +190,7 @@ The move it should cancel into.
 
 ### Cancel - Cancel Type
 As a general guideline, if the value is even, it represents a manual cancel, while an odd value indicates an automatic cancel. A manual cancel requires specific commands to be input in addition to meeting the necessary conditions. In contrast, an automatic cancel only requires the conditions to be fulfilled, with no additional input needed.
+<br/>
 
 # Requirement
 
@@ -295,6 +297,7 @@ Req #   Offset   req       param1     param2     param3     param4     // Descri
 6       0x0064   0x044C    0x0000     0x0000     0x0000     0x0000     // End of the list
 
 ```
+<br/>
 
 # Extra Move Properties
 As the name implies, these are optional properties that can be added to a move. While a Move resource includes its Hitbox and Hurtbox values, other elements—such as modifying flags, controlling hand or facial gestures, consuming tornado effects, or triggering audio and visual effects—are managed through these lists.
@@ -303,9 +306,9 @@ Property values starts from `0x8001`. That's a crucial difference between requir
 
 ### Consist of
 - Frame Number
-- List of Requirements
+- List of Requirements (Starting from Tekken 8)
 - Property ID
-- 5 Parameter values (if any)
+- 5 Parameter values (if any) - Prior games only had 1 possible parameter
 
 ### Structure
 <details>
@@ -440,6 +443,7 @@ They look like this in memory in hexadecimal view:
 ```
 
 Property `1100` (0x44C) denotes the end of the list
+<br/>
 
 # Hit Conditions
 Resource that is used to dictate which animations to apply on the opponent when an attack move connects, this deals with both the hit & block scenarios, while also navigating standing as well as airborne opponents.
@@ -495,6 +499,7 @@ struct tk_hit_condition
 };
 ```
 </details>
+<br/>
 
 # Reaction List
 This resource determines the reaction animations played on the opponent when an attack move connects. It defines the specific animation triggered when the attack is blocked, lands as a normal hit, strikes from different angles (front, side, or behind), or registers as a counter hit. The term "Reaction List" refers to a single instance of this resource, named as such because it contains a list of possible reaction state values.
@@ -671,6 +676,7 @@ struct tk_reaction
 };
 ```
 </details>
+<br/>
 
 # Pushback
 This resource is used in [Reaction-Lists](#reaction-list) to apply pushback to opponents when an attack connects. Before diving into the structure and functionality of pushback, here are some key concepts to understand:
