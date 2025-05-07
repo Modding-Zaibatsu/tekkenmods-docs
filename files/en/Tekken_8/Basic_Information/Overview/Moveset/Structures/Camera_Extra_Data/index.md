@@ -1,0 +1,3 @@
+# Camera Extradata
+
+More info coming soon...
