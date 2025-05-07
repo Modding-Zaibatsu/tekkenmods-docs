@@ -1,6 +1,8 @@
 # Moves
 Anything that involves an animation is categorized as a "Move." This includes intros, win poses, attacks, taunts, throws, reactions to throws, Rage Arts, Heat Smashes, real-time story mode cutscenes, and stage transition animations. Each and every one of these is considered a "Move."
 
+- Data about the body's movement makes an `animation`
+- `animation` plus hitbox, hurtbox, active frames, hit conditions and cancels makes up a `move`
 
 ### Consists of
 - Move Name/Key
