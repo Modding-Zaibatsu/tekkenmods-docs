@@ -6,7 +6,9 @@ Huge thanks to `Sadamitsu` who explained some of the things I wasn't clear about
 ### Please Note
 The structures described here are based on the latest game, *Tekken 8*. While there may be minor differences in structures across different games in the series, please note that these explanations are specifically tailored for said game. You can still get a decent idea for how Movesets work for prior games through this documentation.
 
-A Moveset consists of various structures:
+A `Moveset` is made up of several structures, each represented as a list. These structures are interconnected through references, where one element typically points to a range of others. The end of such a reference is determined by a specific value within the structure—this acts as a boundary. For example, `Move` #100 may reference `Cancel` #3581 through #3589, and a value within the `Cancel` structure defines where this connection ends. In general, these relationships are one-to-many but can be one-to-one too. For instance, a `Move` references multiple Cancels, and each `Cancel` in turn may reference its own set of Requirements and an associated `Cancel Extra Data`.
+
+Movest Structures are listed below:
 
   - [Moves](./Structures/Move/)
   - [Cancels](./Structures/Cancel/)
@@ -27,6 +29,91 @@ A Moveset consists of various structures:
   - [Throw Cameras](./Structures/Throw_Camera/)
   - [Camera Extra Datas](./Structures/Camera_Extra_Data/)
   - [Dialogue Managers](./Structures/Dialogue_Manager/)
+
+
+### Relationships
+#### Move
+- A `Move` must have atleast one `Cancel`, can have multiple
+- A `Move` must have atleast one `Hit Condition`, can have multiple
+- A `Move` can optionally have multiple `Extra Move Properties`
+- A `Move` can optionally have multiple `Move Start/End Properties`
+- A `Move` can optionally have multiple `Voiceclips`
+- A `Move` can optionally have multiple `Hitboxes`
+- A `Move` can optionally have an entry in the `Parrable Moves List` array
+
+### Cancel / Group Cancel
+- A `Cancel` must have atleast one `Requirement`, can have multiple
+- A `Cancel` can have only one `Cancel Extra Data`
+- A `Cancel` can refer to only a single Move (by it's index)
+- A `Cancel` can reference a `Group Cancel` - **Not applied to a Group Cancel**
+- A `Cancel` can reference an `Input Sequence`
+- A `Cancel` must belong to a `Move` or a `Projectile` - **Not applied to a Group Cancel**
+- A `Group Cancel` must belong to a `Cancel` - **Not applied to a Regular Cancel**
+
+### Extra Move Property (EMP)
+- An EMP must have atleast one `Requirement`, can have multiple (starting from Tekken 8)
+- An EMP can reference a `Projectile`
+- An EMP can reference a `Throw Camera`
+- An EMP can reference a `Dialogue`
+- Always belong to a `Move`
+
+### Start/End Properties
+- Exact same as `Extra Move Property`
+
+### Hit Condition (HC)
+- A HC always belongs to a `Move` or a `Projectile`
+- A HC must have atleast one `Requirement`, can have multiple
+- A HC must have a `Reaction List`
+
+### Reaction List (RL)
+- A RL always belongs to a `Hit Condition`
+- A RL always has 7 `Pushback` items
+- A RL always references 17 `Moves` (by their indexes). No uniqueness among them.
+
+### Pushback
+- A `Pushback` always belongs to a `Reaction List`
+- A `Pushback` has atleast one `Pushback Extradata` item, can have multiple
+
+### Pushback Extradata
+- Always belongs to a `Pushback` item
+
+### Input Sequences
+- Always referenced by a `Cancel` (or a `Group Cancel`)
+- has atleast one `Input Extradata` item, can have multiple
+
+### Input Extradata
+- Always belongs to an `Input Sequences`
+
+### Dialogue (or call it "Dialogue Manager")
+- Must have atleast one `Requirement`, can have multiple
+- Always referenced by an `Extra Move Property` (or `Start/End Property`)
+
+### Projectile
+- Must have atleast one `Cancel`, can have multiple
+- Must have atleast one `Hit Condition`, can have multiple
+- Always referenced by an `Extra Move Property` (or `Start/End Property`)
+
+### Throw Camera
+- Always referenced by an `Extra Move Property` (or `Start/End Property`)
+- has atleast one `Camera Extradata` item, can have multiple
+
+### Camera Extradata
+- Always referenced by a `Throw Camera`
+
+### Parryable Moves List
+- A single item is a reference to a `Move`
+
+### Voicelcip
+- Always referenced by a `Move`
+
+### Requirement
+- A single requirement is always part of a `Requirement List`
+- A `Requirement List` can be referenced by:
+  - Cancel
+  - Hit Condition
+  - Extra Move Property
+  - Move Start/End Property
+  - Dialogue
 
 
 ### Structure
