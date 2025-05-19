@@ -49,8 +49,8 @@ A Cancel's command describes the input required to invoke it. The command value 
 As you may have guessed it, directional inputs are movement inputs, such as `forward`, `back`, `neutral`, `down+forward` etc...
 <br/>Meanwhile Button inputs represent attack buttons. E.g, `RP`, `LK`, `LP + RP`, `Rage Art` and even `Heat`.
 <br/>
-<br/>A cancel can actually refer to other resources such as an `Input Sequence` or a list of `Group Cancels`.
-- If a cancel has a command value of or greater than `0x8014`, then that means it is referring to an `Input Sequence` resource. It's fairly straight forward, `0x8014` is the first sequence, `0x8015` would be the second, `0x8016` would be the third and so on.
+<br/>A cancel can actually refer to other resources such as an [Input Sequence](../Input_Sequence/) or a list of `Group Cancels`.
+- If a cancel has a command value of or greater than `0x8014`, then that means it is referring to an [Input Sequence](../Input_Sequence/) resource. It's fairly straight forward, `0x8014` is the first sequence, `0x8015` would be the second, `0x8016` would be the third and so on.
 - If a cancel has a command value of `0x8012`, that means, it is telling the game to look inside `Group Cancels`. In this case, `move_id` value dictates the starting point in the group cancels array. Value `N` would mean to start looking from Nth `Group Cancel` and keep going until a command value of `0x8013` is reached, `0x8013` dictates the end of a group cancel list.
 - If a cancel has a command of `0x8000`, that means it is the end of the cancel list for that move and it is the last cancel.
 - Some command values are pre-fixed. E.g, `0x8001` means to double-tap forward. You can find more in the [spreadsheet](https://docs.google.com/spreadsheets/d/1DBkC-HfqD0KWQNeOTKjJWmPxdbEuCcGZxkPxQpsLkOY/edit?usp=sharing)
