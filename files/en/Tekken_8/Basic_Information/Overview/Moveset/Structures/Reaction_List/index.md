@@ -1,151 +1,182 @@
 # Reaction List
-This resource determines the reaction animations played on the opponent when an attack move connects. It defines the specific animation triggered when the attack is blocked, lands as a normal hit, strikes from different angles (front, side, or behind), or registers as a counter hit. The term "Reaction List" refers to a single instance of this resource, named as such because it contains a list of possible reaction state values.
 
-- Each [Hit Condition](../Hit_Conditions/) item has a corresponding `Reaction List` item
-- Reaction animations are all part of the same moveset that triggers an action. For example, reaction animations to King's throws are not stored in every character's moveset individually. Instead, they are stored within King's moveset and are selected and played from there.
+The **Reaction List** resource determines the opponent's animation when an attack connects. It defines the specific reaction based on:
 
-### Consists of
-- [List of Pushback for different angles/states](#list-of-pushback-for-different-anglesstates)
-- [List of "Direction of Pushback" for different angles/states](#list-of-direction-of-pushback-for-different-anglesstates)
-- [List of "Rotation of Pushback" for different angles/states](#list-of-rotation-of-pushback-for-different-anglesstates)
-- [List of reaction move IDs for different angles/states](#list-of-reaction-move-ids-for-different-anglesstates)
+* Hit type (normal, counter)
+* Relative position (front, side, back)
+* Blocked vs. landed attacks
 
-### List of Pushback for different angles/states
-These refer to [Pushback](../Pushback/) resource. More on them later.
-  - Front
-  - Back
-  - Left
-  - Right
-  - Front (Counter Hit)
-  - Downed
-  - Block
+Each reaction list item contains all relevant data for one reaction configuration.
 
-### List of "Direction of Pushback" for Different Angles/States  
+---
 
-The path or the trajectory in which the opponent will be pushed. When an attack connects and a reaction animation is applied, the opponent's movement can be influenced diagonally. These attributes control that behavior. For example, Kazuya’s **df2 on Counter Hit** slightly pushes the opponent to his right, causing them to become slightly off-axis, this effect is achieved because the trajectory on CH is slightly diagonal.
+## Key Notes
 
-This mini-structure consists of the following values:
+* Every [Hit Condition](../Hit_Conditions/) is paired with a `Reaction List` entry.
+* Reaction animations originate from the **attacker’s** moveset, not the opponent's. For example, reaction animations to King’s throws are stored in King’s moveset and simply played on the opponent.
 
-- Front
-- Back
-- Left
-- Right
-- Front (Counter Hit) / Vertical Pushback for Airborne Opponents
-- Downed
+---
 
-To understand and calculate the precise rotation value, [refer here.](#rotation-value-calculation)<br/>
-[Here's a video example by Sadamitsu](https://drive.google.com/file/d/1X1y_CAgXG-IBF_J-w5kPFDHwqOVgj0KB/view)
+## Components
 
-**Note 1:** The field responsible for *Front* pushback deals with both Hit & Block scenarios<br/>
-**Note 2:** The field responsible for *Front (Counter Hit)* also determines the additional height applied to an airborne opponent when the move connects.
+A Reaction List entry consists of:
 
-### List of "Rotation of Pushback" for different angles/states
-These attributes determine how an opponent turns when an attack connects.
+* [Pushback values for different angles/states](#pushback-values)
+* [Direction of pushback](#pushback-direction-values)
+* [Rotation during pushback](#rotation-values)
+* [Reaction move IDs](#reaction-move-ids)
 
-For example, when Kazuya's **df2 lands on Counter Hit**, the opponent's facing direction shifts slightly to the left of the player upon impact.  
+---
 
-- If an opponent completely turns around after certain attacks, it's due to these rotation values. For instance, a front-hit rotation value may be set to force a **180-degree turn**, causing the opponent to fully rotate upon being hit.
+## Pushback Values
 
-This rotation sub-structure consists of:
-- Front
-- Back
-- Left
-- Right
-- Front (Counter Hit)
-- Downed
+Pushback refers to how the opponent is physically moved on hit. These are pointers to [Pushback](../Pushback/) resources, with different values based on hit angle and state:
 
-To understand and calculate the precise rotation value, [refer here.](#rotation-value-calculation)<br/>
-[Here's a video example by Sadamitsu](https://drive.google.com/file/d/1aP8cU1RuIWlSrwKX3J0Mxetg0U-one2G/view)
+* Front
+* Back
+* Left
+* Right
+* Front (Counter Hit)
+* Downed
+* Block
 
-### List of reaction move IDs for different angles/states
+---
 
-This sub-structure decides what actual move to play for the corresponding situation. They store the move indexes from the source character's moveset. It contains the following values/fields:
-  - Standing / Default
-  - Crouching
-  - Standing (Counter Hit)
-  - Crouching (Counter Hit)
-  - Left Side
-  - Left Side (Crouching)
-  - Right Side
-  - Right Side (Crouching)
-  - Back Side
-  - Back Side (Crouching)
-  - Block
-  - Block (Crouching)
-  - Wall-splatted
-  - Downed
+## Pushback Direction Values
 
-Here is how an example reaction list item would look like in memory (hexadecimal)
-```
-Offset   Example Value                  // Description
+These determine the **trajectory** of the pushback after a hit. Diagonal or off-axis movement is controlled here. For example, **Kazuya’s `df2` on counter hit** pushes the opponent slightly to the right, achieved via a customized direction value.
+
+### Pushback Direction Fields:
+
+* Front
+* Back
+* Left
+* Right
+* Front (Counter Hit)
+* Downed
+
+[See video example by Sadamitsu](https://drive.google.com/file/d/1X1y_CAgXG-IBF_J-w5kPFDHwqOVgj0KB/view)
+
+---
+
+## Rotation Values
+
+These fields define how the opponent's orientation changes when a reaction is triggered.
+
+Example:
+If a front-facing attack causes the opponent to turn 180°, this is controlled via the *Front Rotation* value.
+
+### Rotation Fields:
+
+* Front
+* Back
+* Left
+* Right
+* Front (Counter Hit) — doubles as **vertical pushback** for airborne opponents
+* Downed
+
+[See rotation in action](https://drive.google.com/file/d/1aP8cU1RuIWlSrwKX3J0Mxetg0U-one2G/view)
+
+---
+
+## Reaction Move IDs
+
+These fields determine **which animation/move** is played based on opponent state and angle.
+
+### Fields:
+
+* Standing (Front)
+* Crouching
+* Standing (Counter Hit)
+* Crouching (Counter Hit)
+* Left Side
+* Left Side (Crouching)
+* Right Side
+* Right Side (Crouching)
+* Back Side
+* Back Side (Crouching)
+* Block
+* Block (Crouching)
+* Wall Slump
+* Downed
+
+These are stored as **move indexes** within the attacker's moveset.
+
+---
+
+## Memory Layout Example (Hex View)
+
+```text
+Offset   Example Value      Description
 -----------------------------------------------------------
-0x0000   <PTR to pushback item>         // Front
-0x0008   <PTR to pushback item>         // Back
-0x0010   <PTR to pushback item>         // Left
-0x0018   <PTR to pushback item>         // Right
-0x0020   <PTR to pushback item>         // Front (Counter Hit)
-0x0028   <PTR to pushback item>         // Downed
-0x0030   <PTR to pushback item>         // Block
+0x0000   <PTR>              Front Pushback
+0x0008   <PTR>              Back Pushback
+0x0010   <PTR>              Left Pushback
+0x0018   <PTR>              Right Pushback
+0x0020   <PTR>              Front (Counter Hit) Pushback
+0x0028   <PTR>              Downed Pushback
+0x0030   <PTR>              Block Pushback
 
-0x0038   0x0000                         // Front Direction
-0x003A   0x0000                         // Back Direction
-0x003C   0x0000                         // Left Side Direction
-0x003E   0x0000                         // Right Side Direction
-0x0040   0x0000                         // Front Counterhit Direction
-0x0042   0x0000                         // Downed Direction
+0x0038   0x0000             Front Direction
+0x003A   0x0000             Back Direction
+0x003C   0x0000             Left Direction
+0x003E   0x0000             Right Direction
+0x0040   0x0000             Front (CH)
+0x0042   0x0000             Downed Direction
 
-0x0044   0x0000                         // Front Rotation
-0x0046   0x0000                         // Back Rotation
-0x0048   0x0000                         // Left Side Rotation
-0x004A   0x0000                         // Right Side Rotation
-0x004C   0x0000                         // Vertical Pushback
-0x004E   0x0000                         // Downed Rotation
+0x0044   0x0000             Front Rotation
+0x0046   0x0000             Back Rotation
+0x0048   0x0000             Left Rotation
+0x004A   0x0000             Right Rotation
+0x004C   0x0000             Front (CH) / Vertical Pushback
+0x004E   0x0000             Downed Rotation
 
-0x0050   0x0182 (Move ID 386)           // Standing
-0x0052   0x0182                         // Crouch
-0x0054   0x0182                         // CH
-0x0056   0x0182                         // Crouch CH
-0x0058   0x0182                         // Left Side
-0x005A   0x0182                         // Left Side Crouch
-0x005C   0x0182                         // Right Side
-0x005E   0x0182                         // Right Side Crouch
-
-0x0060   0x0182                         // Back
-0x0062   0x0182                         // Back Crouch
-0x0064   0x0625 (Move ID 1573)          // Block
-0x0066   0x0829 (Move ID 2089)          // Crouch Block
-0x0068   0x0107 (Move ID 263)           // Wallslump
-0x006A   0x0109 (Move ID 265)           // Downed
-0x006C   0x0000                         // Unused
-0x006E   0x0000                         // Unused
-
+0x0050   0x0182             Standing Reaction (Move ID 386)
+0x0052   0x0182             Crouch Reaction
+0x0054   0x0182             CH Reaction
+0x0056   0x0182             Crouch CH Reaction
+0x0058   0x0182             Left Side
+0x005A   0x0182             Left Side Crouch
+0x005C   0x0182             Right Side
+0x005E   0x0182             Right Side Crouch
+0x0060   0x0182             Back
+0x0062   0x0182             Back Crouch
+0x0064   0x0625             Block
+0x0066   0x0829             Crouch Block
+0x0068   0x0107             Wall Slump
+0x006A   0x0109             Downed
+0x006C   0x0000             Unused
+0x006E   0x0000             Unused
 ```
 
-### Structure
+---
+
+## Structure Definition
+
 <details>
-  <summary>All Games (Post-Tekken 5)</summary>
+  <summary><strong>Applicable to Tekken 5 and later</strong></summary>
 
 ```cpp
 struct tk_reaction
 {
   // Pushbacks
-  tk_pushback *front_pushback;
-  tk_pushback *backturned_pushback;
-  tk_pushback *left_side_pushback;
-  tk_pushback *right_side_pushback;
-  tk_pushback *front_counterhit_pushback;
-  tk_pushback *downed_pushback;
-  tk_pushback *block_pushback;
+  tk_pushback* front_pushback;
+  tk_pushback* backturned_pushback;
+  tk_pushback* left_side_pushback;
+  tk_pushback* right_side_pushback;
+  tk_pushback* front_counterhit_pushback;
+  tk_pushback* downed_pushback;
+  tk_pushback* block_pushback;
 
-  // Directions in which the pushback will be applied
-  uint16_t front_direction; // hit & block
+  // Direction values
+  uint16_t front_direction;
   uint16_t back_direction;
   uint16_t left_side_direction;
   uint16_t right_side_direction;
   uint16_t front_counterhit_direction;
   uint16_t downed_direction;
 
-  // Rotations of the body when a reaction is applied
+  // Rotation values
   uint16_t front_rotation;
   uint16_t back_rotation;
   uint16_t left_side_rotation;
@@ -153,7 +184,7 @@ struct tk_reaction
   uint16_t front_counterhit_rotation; // also 'vertical_pushback'
   uint16_t downed_rotation;
 
-  // Move IDs
+  // Reaction move IDs
   uint16_t standing;
   uint16_t crouch;
   uint16_t ch;
@@ -172,28 +203,37 @@ struct tk_reaction
   uint16_t unk2; // unused
 };
 ```
-</details>
-<br/>
 
+</details>
+
+---
 
 ## Rotation Value Calculation
 
-To obtain the 2-byte hexadecimal value that Tekken uses for rotation in degrees, follow this straightforward calculation:
-```
-if      0 degrees = 0x0000
-and   360 degrees = 0xFFFF
-then     1 degree = 0xFFFF / 360 = 0xB6 (or 182 in decimal)
-
-        X degrees = 0xB6 * X
-```
-E.g, `45 degrees` would be `0x1FFF` or `8191`
-
-I'll just quote the exact words that `Sadamitsu` said to me when I asked him about it,
+To compute Tekken's internal rotation value for a given degree:
 
 ```
-I think it would be easier to understand if you imagine a clock face with hexadecimal numbers. Like in the movie The Martian (2015). In this case:
-0x0000 - is like 12 o'clock.
-0x4000 - is like 3 o'clock.
-0x8000 - is like 6 o'clock.
-0xC000 - is like 9 o'clock.
+360 degrees = 0xFFFF (65535 in decimal)
+1 degree    = 0xFFFF / 360 ≈ 0xB6 (182 decimal)
+
+Rotation Value = Degrees * 0xB6
 ```
+
+**Examples:**
+
+* `0 degrees` → `0x0000`
+* `45 degrees` → `0x1FFF`
+* `90 degrees` → `0x2D00`
+* `180 degrees` → `0x5A00`
+* `360 degrees` → `0xFFFF`
+
+### Visual Aid (per Sadamitsu):
+
+> Think of a clock face using hexadecimal:
+>
+> * `0x0000` = 12 o'clock
+> * `0x4000` = 3 o'clock
+> * `0x8000` = 6 o'clock
+> * `0xC000` = 9 o'clock
+
+This metaphor helps in visualizing rotation offsets.

@@ -70,7 +70,7 @@ struct tk_requirement
 ### Found in
 - [Cancels](../Cancel/)
 - [Hit Conditions](../Hit_Conditions/)
-- Cutscene Dialogues
+- [Dialogues](../Dialogue_Manager/)
 - [Extra Move Properties](../Extra_Move_Property/)
 - [Move Start/End Properties](../Move_Start_End_Property/)
 

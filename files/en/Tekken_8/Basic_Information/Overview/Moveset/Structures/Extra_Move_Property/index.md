@@ -9,6 +9,13 @@ Property values starts from `0x8001`. That's a crucial difference between requir
 - Property ID
 - 5 Parameter values (if any) - Prior games only had 1 possible parameter
 
+Among other things, an Extra Move Property can invoke other moveset resources such as:
+- Spawn a [Projectile](../Projectile/)
+- Use a [Throw Camera](../Throw_Camera/)
+- Utilize a [Dialogue](../Dialogue_Manager/) during an intro/outro
+- Apply a [Pushback](../Pushback/) on self or opponent
+- Force a [Move](../Move/) on self or opponent
+
 ### Structure
 <details>
   <summary>Tekken 8</summary>
