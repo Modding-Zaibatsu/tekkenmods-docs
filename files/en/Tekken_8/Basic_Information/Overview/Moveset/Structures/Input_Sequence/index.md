@@ -1,55 +1,99 @@
-# Input Sequence
+# **Input Sequence**
 
-This resource is invoked in [Cancels](../Cancel/) to check if a user has performed a sequence of inputs or not.
-
----
-
-### Components
-
-Each entry in the Input Sequence consists of:
-
-* `Window` — Duration of the input window in frames
-* `Count` - Number of inputs within the sequence
-* [List of Inputs](../Input_Extradata/)
+This resource is primarily used in the **[Cancels](../Cancel/)** system to verify whether a player has executed a specific sequence of inputs within a defined timeframe.
 
 ---
 
-### How It Works
-Each game has a commad value that's used to dictate the start of the `Input Sequence` array, in Tekken 8 v2.01, this value is `0x8014`.
-- `0x8014` -> 1st sequence
-- `0x8015` -> 2nd sequence
-- `0x8016` -> 3rd sequence
-- ... so on
+## **Overview**
 
-When the game encounters an input sequence, the input buffer is checked to see if the player has performed given inputs within the past X frames.
+Each **Input Sequence** consists of:
 
-As an example, let's take Bryan's Jet Upper command, the input sequence number is 254, which means the command for this will be `0x8014` + `254` = `0x8112`.
+* **`Window`** — Duration (in frames) during which the sequence must be completed.
+* **`Count`** — Total number of required inputs in the sequence.
+* **[List of Inputs](../Input_Extradata/)** — The specific directional and button inputs needed.
+
+---
+
+## **How It Works**
+
+Each game command references a specific **Input Sequence** ID. In **Tekken 8 v2.01**, the base value is:
+
 ```
+Base Command Value: 0x8014
+```
+
+To compute the final command value for a move:
+
+```
+Final Command = 0x8014 + Input Sequence Index
+```
+
+### **Example: Bryan’s Jet Upper**
+
+* **Input Sequence Index**: `254`
+* **Final Command Value**: `0x8014 + 254 = 0x8112`
+
+```yaml
 Window: 40
-Amount: 4
-Inputs: n > f > n > b+2
+Count: 4
+Inputs:
+  - n
+  - f
+  - n
+  - b+2
 ```
-For this sequence, the game checks if the above mentioned sequence is in the input buffer, If there's any additional input b/w the 2 required inputs, it is simply ignored.
-- For example, the player can input `n > f > df > d > db > b > n > b+2` and it would still be accepted because the game was able to find the `n > f > n > b+2` sequence.
-- Imagine the user enters this sequence, `n > f > b+2`, in this case, the Jet Upper will not come out since we're missing a neutral input before `b+2` (or aftr `f`)
+
+This means the game will check if the following input pattern appears in the buffer within the past **40 frames**:
+
+```
+n → f → n → b+2
+```
+
+* **Input Flexibility**:
+
+  * The sequence **can** contain extra inputs in between — they are **ignored** as long as the correct sequence appears in the right order.
+  * ✅ Example (Accepted):
+
+    ```
+    n → f → df → d → db → b → n → b+2
+    ```
+  * ❌ Example (Rejected):
+
+    ```
+    n → f → b+2
+    ```
+
+    * Missing the second **neutral** (`n`) input before `b+2`.
 
 ---
 
-### Data Structure
+## Data Structure
 
 ```cpp
 struct tk_input
 {
-  // can further be broken down to "button" & "direction"
+  // Represents a single input, can be broken into:
+  //   - Direction
+  //   - Button
   uint64_t command;
 };
 
-
 struct tk_input_sequence
 {
-  uint16_t input_window_frames;
-  uint16_t input_amount;
-  uint32_t _0x4;
-  tk_input *inputs;
+  uint16_t input_window_frames;  // Time window to check for input sequence (in frames)
+  uint16_t input_amount;         // Number of required inputs
+  uint32_t _0x4;                 // Reserved / Unknown
+  tk_input* inputs;              // Pointer to input sequence array
 };
 ```
+
+---
+
+## **Key Points**
+
+* Commands are matched by scanning recent inputs for the required sequence **in order**.
+* Extra or "noise" inputs between the required inputs are **ignored**.
+* Sequences **must not skip required inputs**.
+* Used for cancels with complex inputs like King's chain throws or Bryan's Jet Upper
+
+---
