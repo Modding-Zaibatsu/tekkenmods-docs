@@ -14,7 +14,7 @@ The following table provides an overview of character IDs for the characters in 
 | 7            | CHT          | Bryan                   | Yes      |
 | 8            | GRL          | Kazuya                  | Yes      |
 | 9            | BSN          | Steve                   | Yes      |
-| 10           | CCN          | Jack-7                  | Yes      |
+| 10           | CCN          | Jack-8                  | Yes      |
 | 11           | DER          | Asuka                   | Yes      |
 | 12           | SWL          | Devil Jin               | Yes      |
 | 13           | KLW          | Feng                    | Yes      |
@@ -50,3 +50,4 @@ The following table provides an overview of character IDs for the characters in 
 | 121          | XXE          | Devil Jin (Jin's voice) | No       |
 | 122          | XXF          | Tekken Monk             | No       |
 | 123          | XXG          | Seiryu                  | No       |
+| N/A          | S28          | Devil Reina             | No       |
