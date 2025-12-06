@@ -42,6 +42,8 @@ The following table provides an overview of character IDs for the characters in 
 | 35           | BEE          | Heihachi                | Yes      |
 | 36           | OKM          | Clive                   | Yes      |
 | 37           | KGR          | Anna                    | Yes      |
+| 38           | KNK          | Armor King              | Yes      |
+| 39           | WKZ          | Mairy Zo                | Yes      |
 | 116          | DEK          | Practice Dummy          | No       |
 | 117          | XXA          | Angel Jin               | No       |
 | 118          | XXB          | True Devil Kazuya       | No       |
